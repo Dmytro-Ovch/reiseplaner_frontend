@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 
-const ProtectedRoute = ({ roles = [] }) => {
+const ProtectedRoute = ({ children, roles = [] }) => {
   const { user, isRefreshing } = useContext(AuthContext);
 
   // Während refresh → Ladeanzeige
@@ -23,7 +23,8 @@ const ProtectedRoute = ({ roles = [] }) => {
   }
 
   // Alles OK → render Outlet (Kinder-Routes)
-  return <Outlet />;
+  //return <Outlet />;
+  return children ? children : <Outlet />;
 };
 
 export default ProtectedRoute;

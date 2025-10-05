@@ -25,6 +25,14 @@ const UserMenu = () => {
           Eine Reise erstellen
         </Link>
 
+        <Link to="/travelstable" className="btn btn-ghost btn-sm text-lg">
+          Geplante Reisen
+        </Link>
+
+        <Link to="/generalphotogallery" className="btn btn-ghost btn-sm text-lg">
+          Fotogalerie
+        </Link>
+
         {user.role === "admin" && (
           <Link to="/dashboard" className="btn btn-ghost btn-sm text-lg">
             Dashboard

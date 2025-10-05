@@ -7,13 +7,13 @@ function TravelStepperPage() {
     <TravelProvider>
       {/* Container füllt nur den Outlet-Bereich, nicht den ganzen Screen */}
       <div className="flex h-full">
-        {/* Karte */}
-        <div className="flex-1">
+        {/* Karte 7/9 */}
+        <div className="flex-[7]">
           <LeafletMap />
         </div>        
         
-        {/* Formular */}
-        <div className="w-80 bg-gray-800 overflow-y-auto p-4">
+        {/* Formular 2/9 */}
+        <div className="flex-[2] bg-gray-800 overflow-y-auto p-4">
           <TravelStepperForm />
         </div>
       </div>

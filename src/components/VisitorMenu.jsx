@@ -11,6 +11,7 @@ const VisitorMenu = () => {
         <Link to="/travelplannerpage" className="btn btn-ghost btn-sm text-lg">
           Eine Reise planen
         </Link>
+        
       <nav className="flex gap-4">
         <Link to="/signup" className="btn btn-ghost btn-sm text-lg">
           Sign Up

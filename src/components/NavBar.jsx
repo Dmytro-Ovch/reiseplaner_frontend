@@ -13,6 +13,12 @@ const Navbar = () => {
         <Link to="/" className="btn btn-ghost text-xl">
           Reiseplaner
         </Link>
+        {/* {user && user.role === "admin" && (
+        <Link to="/dashboard" className="btn btn-ghost btn-sm">
+         Dashboard
+        </Link>
+      )} */}
+
       </div>
       <div className="flex gap-2">
         {user ? <UserMenu /> : <VisitorMenu />}

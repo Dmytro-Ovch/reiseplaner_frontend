@@ -3,7 +3,7 @@ import { useTravel } from "../contexts/TravelContext";
 import { searchCities } from "../api"; // Geoapify Autocomplete
 
 export default function TravelCityList() {
-  const { routePoints, setRoutePoints } = useTravel();
+  const { routePoints, setRoutePoints, photos, setPhotos } = useTravel();
   const [newCity, setNewCity] = useState("");
   const [newCountry, setNewCountry] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -28,14 +28,17 @@ export default function TravelCityList() {
 
   // Auswahl aus Vorschlägen -> direkt in Route
   const handleSelectSuggestion = (s) => {
-    setNewCity(s.city || s.address_line1 || s.formatted);
-    setNewCountry(s.country || "");
+    const cityName = s.city || s.address_line1 || s.formatted;
+    const countryName = s.country || "";
+
+    setNewCity(cityName);
+    setNewCountry(countryName);
     setSuggestions([]);
 
     if (s.lat && s.lon) {
       const cityObj = {
-        name: s.city || s.address_line1 || s.formatted,
-        country: s.country || "",
+        name: cityName,
+        country: countryName,
         lat: s.lat,
         lng: s.lon,
       };
@@ -45,18 +48,40 @@ export default function TravelCityList() {
       );
       if (!exists) {
         setRoutePoints([...routePoints, cityObj]);
+
+        // Neues Foto-Array für diese Stadt anlegen
+        setPhotos((prev) => ({
+          ...prev,
+          [cityObj.name]: prev[cityObj.name] || [],
+        }));
       }
     }
   };
 
   // Stadt löschen
   const handleDelete = (idx) => {
+    const cityName = routePoints[idx]?.name;
     setRoutePoints(routePoints.filter((_, i) => i !== idx));
+
+    if (cityName) {
+      setPhotos((prev) => {
+        const copy = { ...prev };
+        delete copy[cityName];
+        return copy;
+      });
+    }
   };
 
   // Undo / Reset
-  const undoLastPoint = () => setRoutePoints((prev) => prev.slice(0, -1));
-  const resetRoute = () => setRoutePoints([]);
+  const undoLastPoint = () => {
+    const last = routePoints[routePoints.length - 1];
+    handleDelete(routePoints.length - 1);
+  };
+
+  const resetRoute = () => {
+    setRoutePoints([]);
+    setPhotos({});
+  };
 
   // Reihenfolge ändern
   const moveCity = (idx, direction) => {
@@ -69,7 +94,6 @@ export default function TravelCityList() {
   };
 
   return (
-    //<div className="p-4 bg-base-200 rounded-box shadow-md w-96">
     <div className="p-3 max-w-xl mx-auto">
       <h2 className="text-lg font-bold mb-4">Reiseroute (Städte)</h2>
 
@@ -87,10 +111,14 @@ export default function TravelCityList() {
           <ul className="menu bg-base-100 shadow rounded-box absolute top-12 w-full z-10">
             {suggestions.map((s, i) => (
               <li key={i}>
-                <a onClick={() => handleSelectSuggestion(s)}>
+                <button
+                  type="button"
+                  className="text-left w-full"
+                  onClick={() => handleSelectSuggestion(s)}
+                >
                   {s.city || s.address_line1 || s.formatted},{" "}
                   <span className="opacity-70">{s.country}</span>
-                </a>
+                </button>
               </li>
             ))}
           </ul>
@@ -100,7 +128,6 @@ export default function TravelCityList() {
       {/* Undo/Reset */}
       <div className="flex gap-2 mb-4">
         <button
-          //className="btn btn-secondary btn-sm flex-1"
           className="btn btn-sm flex-1 bg-blue-500 hover:bg-blue-600 text-white"
           onClick={undoLastPoint}
           disabled={routePoints.length === 0}

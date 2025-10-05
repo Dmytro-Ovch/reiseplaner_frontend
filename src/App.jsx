@@ -7,6 +7,11 @@ import TravelPlannerPage from './pages/TravelPlannerPage.jsx';
 import TravelStepperPage from './pages/TravelStepperPage.jsx';
 import SignUp from "./pages/SignUp.jsx";
 import Login from "./pages/Login.jsx";
+import ArcGISPage from "./pages/ArcGISPage.jsx";
+import TravelTablePage from "./pages/TravelTable.jsx";
+import AdminDashboard from "./pages/AdminDashboard.jsx";
+import PhotoLibrary from "./pages/PhotoLibraryPage.jsx";
+import GeneralPhotoPage from "./pages/GeneralPhotoPage.jsx";
 
 //import TravelPage from "./pages/TravelPage";
 //import Dashboard from "./pages/Dashboard";
@@ -16,6 +21,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import TravelStepperForm from './components/TravelStepperForm.jsx';
 import TravelPlanner from './components/LeafletMap.jsx';
 import TravelCityList from './components/TravelCityList.jsx';
+import PhotoLibraryPage from './pages/PhotoLibraryPage.jsx';
 
 function App() {
   return (
@@ -25,8 +31,12 @@ function App() {
         <Route index element={<Home />} />
         <Route path="/travelplannerpage" element={<TravelPlannerPage />} />
         <Route path="/travelstepperpage" element={<TravelStepperPage />} />
+        <Route path="/photolibrary" element={<PhotoLibrary />} />
+        <Route path="/generalphotogallery" element={<GeneralPhotoPage />} />
+        <Route path='/travelstable' element={<TravelTablePage />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/arcgispage" element={<ArcGISPage />} />
       </Route>
 
       {/* Protected routes for logged-in users */}
@@ -34,11 +44,12 @@ function App() {
         <Route path="/travelform" element={<TravelStepperForm />} />
         <Route path="/travelplanner" element={<TravelPlanner />} />
         <Route path="/travelcities" element={<TravelCityList />} />
+        
       </Route>
 
       {/* Protected routes only for admins */}
-      <Route element={<ProtectedRoute roles={["admin"]} />}>
-        {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+      <Route element={<ProtectedRoute roles={["admin", "superadmin"]} />}>
+         <Route path="/dashboard" element={<AdminDashboard />} /> 
       </Route>
 
       {/* Catch-all */}
