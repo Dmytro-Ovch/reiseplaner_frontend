@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function CityInfoWikidata({ city }) {
+function CityInfo({ city }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -118,4 +118,4 @@ function CityInfoWikidata({ city }) {
   );
 }
 
-export default CityInfoWikidata;
+export default CityInfo;
