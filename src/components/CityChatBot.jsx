@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function CityChatBot({ city }) {
-  const [messages, setMessages] = useState([
-    { role: "assistant", content: `Hallo! Frag mich gerne nach Sehenswürdigkeiten in ${city}. ` }
-  ]);
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (city) {
+      setMessages([
+        { role: "assistant", content: `Hallo! Frag mich gerne nach Sehenswürdigkeiten in ${city}. ` }
+      ]);
+    }
+  }, [city]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -41,9 +47,7 @@ export default function CityChatBot({ city }) {
               m.role === "user" ? "text-right text-blue-400" : "text-left text-green-300"
             }`}
           >
-            <p className="inline-block bg-gray-700 rounded px-3 py-1">
-              {m.content}
-            </p>
+            <p className="inline-block bg-gray-700 rounded px-3 py-1">{m.content}</p>
           </div>
         ))}
         {loading && <p className="text-gray-400 text-sm">Denke nach...</p>}
@@ -56,11 +60,7 @@ export default function CityChatBot({ city }) {
           onChange={(e) => setInput(e.target.value)}
           placeholder="Frag nach Sehenswürdigkeiten..."
         />
-        <button
-          className="btn btn-accent"
-          onClick={sendMessage}
-          disabled={loading}
-        >
+        <button className="btn btn-accent" onClick={sendMessage} disabled={loading}>
           Senden
         </button>
       </div>

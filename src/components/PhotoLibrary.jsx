@@ -3,7 +3,7 @@ import { fetchUnsplashImages } from "../api";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTravel } from "../contexts/TravelContext";
 
-export default function PhotoLibrary() {
+export default function PhotoLibrary({ onCitySelect }) {
   const [openCity, setOpenCity] = useState(null);       // Modal für eine Stadt
   const [modalPhoto, setModalPhoto] = useState(null);   // Vollbild-Preview
   const { photos, setPhotos, unsplash, setUnsplash } = useTravel(); // Context erweitert
@@ -57,7 +57,7 @@ export default function PhotoLibrary() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
+    <div className="bg-gray-900 text-white p-6">
       <div className="max-w-3xl mx-auto flex flex-col gap-8">
         <h2 className="text-3xl font-bold text-center">Allgemeine Informationen über die Stadt </h2>
 
@@ -90,7 +90,7 @@ export default function PhotoLibrary() {
               <button
                 type="button"
                 className="btn btn-accent btn-sm"
-                onClick={() => openModal(p.city)}
+                onClick={() => openModal(p.city) && onCitySelect(p.city)} // Stadt an Parent melden
               >
                 Fotos wählen
               </button>
