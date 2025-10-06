@@ -1,4 +1,4 @@
-import ArcMap from "../components/ArcGISMap";
+import ArcMap from "../components/ArcMap";
 import TravelCityList from "../components/TravelCityList";
 import { TravelProvider, useTravel } from "../contexts/TravelContext";
 

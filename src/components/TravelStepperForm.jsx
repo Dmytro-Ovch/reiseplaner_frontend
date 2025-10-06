@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 export default function TravelStepperForm() {
   const { user } = useContext(AuthContext);
-  const { routePoints, setRoutePoints, photos, setPhotos } = useTravel();
+  const { routePoints, setRoutePoints, photos, setPhotos, setUnsplash } = useTravel();
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [step, setStep] = useState(1);
 
