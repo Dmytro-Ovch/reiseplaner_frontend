@@ -105,8 +105,8 @@ export default function LeafletMap() {
     <div className="relative w-full h-screen">
       {/* Karte */}
       <MapContainer
-        center={[50.5, 10]}
-        zoom={5}
+        center={[50, 10]}
+        zoom={6}
         style={{ height: "100%", width: "100%" }}
         whenCreated={mapInstance => { window._leaflet_map_instance = mapInstance; }}
       >

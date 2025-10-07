@@ -13,15 +13,11 @@ import AdminDashboard from "./pages/AdminDashboard.jsx";
 import PhotoLibrary from "./pages/PhotoLibraryPage.jsx";
 import GeneralPhotoPage from "./pages/GeneralPhotoPage.jsx";
 
-//import TravelPage from "./pages/TravelPage";
-//import Dashboard from "./pages/Dashboard";
-
 // Components
 import ProtectedRoute from "./components/ProtectedRoute";
 import TravelStepperForm from './components/TravelStepperForm.jsx';
 import TravelPlanner from './components/LeafletMap.jsx';
 import TravelCityList from './components/TravelCityList.jsx';
-import PhotoLibraryPage from './pages/PhotoLibraryPage.jsx';
 
 function App() {
   return (

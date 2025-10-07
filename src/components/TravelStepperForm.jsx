@@ -1,10 +1,12 @@
 import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
+import { AlertContext } from "../contexts/AlertContext";
 import { useTravel } from "../contexts/TravelContext";
 import { Link } from "react-router-dom";
 
 export default function TravelStepperForm() {
   const { user } = useContext(AuthContext);
+  const { showAlert } = useContext(AlertContext);
   const { routePoints, setRoutePoints, photos, setPhotos, setUnsplash } = useTravel();
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [step, setStep] = useState(1);
@@ -52,24 +54,24 @@ export default function TravelStepperForm() {
 const removePoint = (index) => {
   const cityName = routePoints[index]?.name;
 
-  // 1️ Stadt aus formData.points entfernen
+  // Stadt aus formData.points entfernen
   setFormData((prev) => ({
     ...prev,
     points: prev.points.filter((_, i) => i !== index),
   }));
 
-  // 2️ Stadt aus routePoints entfernen
+  // Stadt aus routePoints entfernen
   setRoutePoints((prev) => prev.filter((_, i) => i !== index));
 
   if (cityName) {
-    // 3️ Fotos dieser Stadt löschen
+    // Fotos dieser Stadt löschen
     setPhotos((prev) => {
       const copy = { ...prev };
       delete copy[cityName];
       return copy;
     });
 
-    // 4️ Unsplash-Cache dieser Stadt löschen
+    // Unsplash-Cache dieser Stadt löschen
     setUnsplash((prev) => {
       const copy = { ...prev };
       delete copy[cityName];
@@ -79,9 +81,12 @@ const removePoint = (index) => {
 };
 
 
-  // Submit Handler
+  // Submit Handler mit globalem Alert-System
   const handleSubmit = async () => {
-    if (!user) return alert("Sie müssen eingeloggt sein!");
+    if (!user) {
+      showAlert("error", "Sie müssen eingeloggt sein!");
+      return;
+    }
 
     const payload = {
       username: user.username,
@@ -102,11 +107,13 @@ const removePoint = (index) => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Fehler beim Speichern der Reise");
 
-      alert("Reise erfolgreich gespeichert!");
+      // Erfolg via globalem Alert
+      showAlert("success", "Reise erfolgreich gespeichert!");
       console.log("Gespeichert:", data);
     } catch (err) {
       console.error(err);
-      alert("Fehler: " + err.message);
+      // Fehler via globalem Alert
+      showAlert("error", "Fehler: " + err.message);
     }
   };
 
@@ -220,24 +227,7 @@ const removePoint = (index) => {
                   >
                     Fotos auswählen
                   </Link>
-
-                  {/* <label className="btn btn-info flex-1 cursor-pointer">
-                    Foto hochladen
-                    <input
-                      type="file"
-                      accept="image/*"
-                      multiple
-                      className="hidden"
-                      onChange={(e) => {
-                        const files = Array.from(e.target.files);
-                        const urls = files.map((f) => URL.createObjectURL(f));
-                        setPhotos((prev) => ({
-                          ...prev,
-                          [p.city]: [...(prev[p.city] || []), ...urls],
-                        }));
-                      }}
-                    />
-                  </label> */}
+                
                 </div>
 
                 {/* Vorschau */}

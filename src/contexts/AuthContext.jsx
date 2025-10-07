@@ -1,5 +1,6 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AlertContext } from "./AlertContext"; 
 
 const AuthContext = createContext();
 
@@ -7,6 +8,7 @@ const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isRefreshing, setIsRefreshing] = useState(true);
 
+  const { showAlert } = useContext(AlertContext); // Zugriff auf globalen Alert
   const navigate = useNavigate();
 
   // Signup
@@ -22,10 +24,10 @@ const AuthContextProvider = ({ children }) => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Signup failed");
 
-      alert(`Signup successful, ${data.data.username}! Please log in.`);
+      showAlert("success", `Signup erfolgreich, ${data.data.username}! Bitte logge dich ein.`);
       navigate("/login");
     } catch (error) {
-      alert(error.message);
+      showAlert("error", error.message);
       console.error(error);
       throw error;
     }
@@ -45,11 +47,10 @@ const AuthContextProvider = ({ children }) => {
       if (!res.ok) throw new Error(data.error || "Login failed");
 
       setUser(data.data);
-
-      alert(`Login successful, ${data.data.username}. Role: ${data.data.role}`);
+      showAlert("success", `Login erfolgreich, ${data.data.username}. Rolle: ${data.data.role}`);
       navigate("/");
     } catch (error) {
-      alert(error.message);
+      showAlert("error", error.message);
       console.error(error);
       throw error;
     }
@@ -68,16 +69,15 @@ const AuthContextProvider = ({ children }) => {
 
       setUser(null);
       navigate("/");
-
-      alert(data.message || "Logout successful");
+      showAlert("info", data.message || "Logout erfolgreich");
     } catch (error) {
-      alert(error.message);
+      showAlert("error", error.message);
       console.error(error);
       throw error;
     }
   };
 
-  // Refresh session
+  // Session refresh
   useEffect(() => {
     const refresh = async () => {
       try {
@@ -85,10 +85,9 @@ const AuthContextProvider = ({ children }) => {
           method: "GET",
           credentials: "include",
         });
-
         const data = await res.json();
         if (res.ok) {
-          setUser(data.data); // User-Daten setzen
+          setUser(data.data);
         }
       } catch (err) {
         console.warn("Session refresh failed", err);
@@ -96,14 +95,11 @@ const AuthContextProvider = ({ children }) => {
         setIsRefreshing(false);
       }
     };
-
     refresh();
   }, []);
 
   return (
-    <AuthContext.Provider
-      value={{ user, setUser, signup, login, logout, isRefreshing }}
-    >
+    <AuthContext.Provider value={{ user, setUser, signup, login, logout, isRefreshing }}>
       {children}
     </AuthContext.Provider>
   );

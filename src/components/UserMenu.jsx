@@ -22,7 +22,7 @@ const UserMenu = () => {
       {/* Links direkt in einer Reihe */}
       <nav className="flex gap-4">
         
-        <Link to="/arcgispage" className="btn btn-ghost btn-sm text-lg">
+        <Link to="/travelplannerpage" className="btn btn-ghost btn-sm text-lg">
           Eine Reise planen
         </Link>
 
